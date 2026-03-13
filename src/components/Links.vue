@@ -1,5 +1,6 @@
 <template>
-  <div v-if="siteLinks[0]" class="links">
+  <!-- TODO 临时隐藏网站列表 -->
+  <div v-if="siteLinks[0]" class="links" style="display: none">
     <div class="line">
       <Icon size="20">
         <Link />
