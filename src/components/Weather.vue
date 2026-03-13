@@ -38,17 +38,6 @@ const weatherData = reactive({
   },
 });
 
-// 取出天气平均值
-const getTemperature = (min, max) => {
-  try {
-    // 计算平均值并四舍五入
-    const average = (Number(min) + Number(max)) / 2;
-    return Math.round(average);
-  } catch (error) {
-    console.error("计算温度出现错误：", error);
-    return "NaN";
-  }
-};
 
 // 获取天气数据
 const getWeatherData = async () => {
@@ -58,16 +47,30 @@ const getWeatherData = async () => {
       console.log("未配置，使用备用天气接口");
       const result = await getOtherWeather();
       console.log(result);
-      const data = result.result;
+      // 解析 api.vvhan.com 数据
+      const data = result;
+      if (!data.success) {
+        throw new Error("接口返回失败");
+      }
       weatherData.adCode = {
-        city: data.city.City || "未知地区",
-        // adcode: data.city.cityId,
+        city: data.city || "未知地区",
       };
+      
+      const getTemperature = (min, max) => {
+        try {
+          const average = (Number(min.replace("℃", "")) + Number(max.replace("℃", ""))) / 2;
+          return Math.round(average);
+        } catch (error) {
+          console.error("计算温度出现错误：", error);
+          return "NaN";
+        }
+      };
+
       weatherData.weather = {
-        weather: data.condition.day_weather,
-        temperature: getTemperature(data.condition.min_degree, data.condition.max_degree),
-        winddirection: data.condition.day_wind_direction,
-        windpower: data.condition.day_wind_power,
+        weather: data.info.type,
+        temperature: getTemperature(data.info.low, data.info.high),
+        winddirection: data.info.fengxiang,
+        windpower: data.info.fengli,
       };
     } else {
       // 获取 Adcode
