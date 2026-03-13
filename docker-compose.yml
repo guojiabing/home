@@ -2,9 +2,10 @@ version: '3'
 
 services:
   app:
+    image: homepage:latest
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "12445:12445"
+      - "8888:12445"
