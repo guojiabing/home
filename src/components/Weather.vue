@@ -21,8 +21,8 @@
 import { getAdcode, getWeather, getOtherWeather } from "@/api";
 import { Error } from "@icon-park/vue-next";
 
-// 高德开发者 Key
-const mainKey = import.meta.env.VITE_WEATHER_KEY;
+// 高德开发者 Key (内置一个公用免费 key 作为保底，获得极致精确定位)
+const mainKey = import.meta.env.VITE_WEATHER_KEY || "0113a13c88697dcea6a445584d535837";
 
 // 天气数据
 const weatherData = reactive({
